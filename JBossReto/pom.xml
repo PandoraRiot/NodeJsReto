@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.erika.sirmed</groupId> <!-- Group ID de tu proyecto -->
+    <artifactId>MiJBossApp</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>war</packaging> <!-- Empaquetado como aplicación web (WAR) -->
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Asegúrate de que esto coincide con tu versión de Java instalada (8, 11 o 17) -->
+        <maven.compiler.source>21</maven.compiler.source> 
+        <maven.compiler.target>21</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <!-- Dependencia para las APIs de Servlet y JSP (Jakarta EE) -->
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-web-api</artifactId>
+            <version>9.1.0</version> <!-- Compatible con WildFly moderno -->
+            <scope>provided</scope> <!-- 'provided' indica que el servidor (WildFly) ya provee esta API -->
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}</finalName> <!-- El WAR resultante se llamará MiJBossApp.war -->
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.3.2</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

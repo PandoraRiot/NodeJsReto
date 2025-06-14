@@ -1,0 +1,92 @@
+/* Algunos estilos para la página general */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 40px;
+    background-color: #e0f7fa; /* Un azul claro suave */
+    color: #263238; /* Gris oscuro para el texto */
+    line-height: 1.6;
+}
+h1 {
+    color: #00796b; /* Un verde azulado vibrante */
+    text-align: center;
+    margin-bottom: 25px;
+}
+p {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    text-align: justify;
+}
+button {
+    display: block; /* Para que el botón ocupe su propia línea */
+    margin: 0 auto; /* Para centrar el botón */
+    padding: 12px 25px;
+    background-color: #00bcd4; /* Azul brillante */
+    color: white;
+    border: none;
+    border-radius: 25px; /* Bordes más redondeados */
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Animación suave */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+button:hover {
+    background-color: #0097a7; /* Tono más oscuro al pasar el mouse */
+    transform: translateY(-2px); /* Pequeño efecto de elevación */
+}
+button:active {
+    transform: translateY(0); /* Vuelve a su posición al hacer clic */
+}
+
+/* Estilos para el Formulario */
+.formulario-estilo {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    max-width: 500px;
+    margin: 30px auto; /* Centra el formulario */
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #00796b;
+}
+
+.form-group input[type="text"] {
+    width: calc(100% - 22px); /* Ancho completo menos padding y borde */
+    padding: 10px;
+    border: 1px solid #b2dfdb; /* Borde suave */
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box; /* Incluye padding y borde en el ancho */
+}
+
+.form-group input[type="text"]:focus {
+    border-color: #00bcd4; /* Borde más oscuro al enfocar */
+    outline: none; /* Quita el contorno por defecto */
+    box-shadow: 0 0 5px rgba(0, 188, 212, 0.5);
+}
+
+.error-message {
+    color: #d32f2f; /* Rojo para mensajes de error */
+    font-size: 0.9em;
+    margin-top: 5px;
+    display: block; /* Para que ocupe su propia línea */
+}
+
+
+
+/* Estilo para el input cuando tiene un error */
+.form-group input.error {
+    border-color: #d32f2f; /* Borde rojo */
+}

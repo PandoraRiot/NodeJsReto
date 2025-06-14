@@ -52,6 +52,38 @@ app.get('/greet', (req, res) => {
     console.log(`Endpoint /greet accedido por ${userName}.`);
 });
 
+// Endpoint para el microservicio de suma (Parte 4 del reto)
+app.get('/add', (req, res) => {
+    // Obtenemos los parámetros 'a' y 'b' de la query string de la URL.
+    // Usamos parseFloat para convertirlos a números flotantes, lo que permite decimales.
+    const a = parseFloat(req.query.a);
+    const b = parseFloat(req.query.b);
+
+    // Validamos si 'a' y 'b' son números válidos.
+    // Si alguno no es un número (NaN), enviamos un error 400 (Bad Request).
+    if (isNaN(a) || isNaN(b)) {
+        console.warn(`[<span class="math-inline">\{new Date\(\)\.toISOString\(\)\}\] Error en /add\: Parámetros inválidos\. a\=</span>{req.query.a}, b=${req.query.b}`);
+        return res.status(400).json({
+            error: 'Parámetros inválidos',
+            message: 'Por favor, proporciona dos números válidos para "a" y "b". Ejemplo: /add?a=5&b=3'
+        });
+    }
+
+    // Realizamos la suma de los dos números.
+    const sum = a + b;
+
+    // Registramos la operación en la consola del servidor.
+    console.log(`[${new Date().toISOString()}] Suma calculada: ${a} + ${b} = ${sum}`);
+
+    // Enviamos la respuesta en formato JSON con los números originales, la suma y un mensaje.
+    res.json({
+        a: a,
+        b: b,
+        sum: sum,
+        message: `La suma de ${a} y ${b} es ${sum}.`
+    });
+});
+
 // Nuevo endpoint para recibir el reporte del formulario
 app.post('/submit-report', (req, res) => {
     const reportData = req.body; // Los datos del formulario estarán en req.body gracias a express.json()

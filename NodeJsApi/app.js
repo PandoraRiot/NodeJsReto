@@ -2,14 +2,25 @@ const express = require('express'); // Importa el módulo Express
 const app = express(); // Crea una instancia de la aplicación Express
 const path = require('path'); // Importa el módulo 'path' para manejar rutas de archivos
 
-app.use(express.json()); 
-// 
-app.use(express.static(path.join(__dirname, '..', 'NodeJsReto')));
-// -----------------------------------------------------------------------
-
 const port = 3000; // Define el puerto en el que correrá el servidor
 
-// --- Middleware de registro de solicitudes ---
+// Middleware para parsear JSON en las solicitudes POST
+// Esto es CRUCIAL para recibir los datos del formulario en req.body
+app.use(express.json()); 
+
+// --- Servir archivos estáticos ---
+// Sirve la carpeta raíz de tu proyecto Git (C:\Users\ALEXANDRA\Documents\RETO.NODEJS\NodeJsReto)
+// Esto permite acceder a README.md, evidencias.html y la carpeta 'assets' directamente desde la raíz del servidor.
+// Ejemplo: http://localhost:3000/README.md, http://localhost:3000/evidencias.html, http://localhost:3000/assets/imagen.JPG
+app.use(express.static(path.join(__dirname, '..')));
+
+// Sirve la subcarpeta 'NodeJsReto' (donde está index.html y script.js)
+// bajo una ruta específica para que tu frontend funcione correctamente.
+// Esto significa que index.html será accesible en http://localhost:3000/NodeJsReto/index.html
+app.use('/NodeJsReto', express.static(path.join(__dirname, '..', 'NodeJsReto')));
+
+
+// --- Middleware de registro de solicitudes (Parte 2 del reto) ---
 // Este middleware se ejecutará para CADA solicitud que reciba el servidor
 app.use((req, res, next) => {
     const timestamp = new Date().toISOString(); // Obtiene la fecha y hora actual
@@ -17,7 +28,13 @@ app.use((req, res, next) => {
     next(); // Pasa el control al siguiente middleware o a la ruta correspondiente
 });
 
-// --- Endpoint /greet que devuelve un mensaje JSON ---
+// --- Endpoint para la página principal del frontend (index.html) ---
+// Si alguien accede a http://localhost:3000/, se le redirige a la ubicación correcta de index.html
+app.get('/', (req, res) => {
+    res.redirect('/NodeJsReto/index.html');
+});
+
+// --- Endpoint /greet que devuelve un mensaje JSON (Parte 2 del reto) ---
 app.get('/greet', (req, res) => {
     const userName = req.query.name || 'visitante'; // Predeterminado a 'visitante'
     const now = new Date();
@@ -45,37 +62,29 @@ app.get('/greet', (req, res) => {
         endpointsDisponibles: {
             obtenerBienvenida: 'GET /greet?name=TuNombre - Obtiene un saludo personalizado y la hora actual.',
             enviarReporte: 'POST /submit-report - Para enviar un reporte de evento de riesgo desde el formulario HTML.',
-            // Podrías añadir más endpoints aquí si los desarrollas en el futuro
         },
         ubicacionServidor: 'Medellín, Antioquia, Colombia'
     });
     console.log(`Endpoint /greet accedido por ${userName}.`);
 });
 
-// Endpoint para el microservicio de suma (Parte 4 del reto)
+// --- Endpoint para el microservicio de suma (Parte 4 del reto) ---
 app.get('/add', (req, res) => {
-    // Obtenemos los parámetros 'a' y 'b' de la query string de la URL.
-    // Usamos parseFloat para convertirlos a números flotantes, lo que permite decimales.
-    const a = parseFloat(req.query.a);
-    const b = parseFloat(req.query.b);
+    const a = parseFloat(req.query.a); // Convierte el parámetro 'a' a número flotante
+    const b = parseFloat(req.query.b); // Convierte el parámetro 'b' a número flotante
 
-    // Validamos si 'a' y 'b' son números válidos.
+    // Valida si 'a' y 'b' son números válidos.
     // Si alguno no es un número (NaN), enviamos un error 400 (Bad Request).
     if (isNaN(a) || isNaN(b)) {
-        console.warn(`[<span class="math-inline">\{new Date\(\)\.toISOString\(\)\}\] Error en /add\: Parámetros inválidos\. a\=</span>{req.query.a}, b=${req.query.b}`);
+        console.warn(`[${new Date().toISOString()}] Error en /add: Parámetros inválidos. a=${req.query.a}, b=${req.query.b}`);
         return res.status(400).json({
             error: 'Parámetros inválidos',
             message: 'Por favor, proporciona dos números válidos para "a" y "b". Ejemplo: /add?a=5&b=3'
         });
     }
 
-    // Realizamos la suma de los dos números.
-    const sum = a + b;
-
-    // Registramos la operación en la consola del servidor.
+    const sum = a + b; // Realiza la suma
     console.log(`[${new Date().toISOString()}] Suma calculada: ${a} + ${b} = ${sum}`);
-
-    // Enviamos la respuesta en formato JSON con los números originales, la suma y un mensaje.
     res.json({
         a: a,
         b: b,
@@ -84,14 +93,14 @@ app.get('/add', (req, res) => {
     });
 });
 
-// Nuevo endpoint para recibir el reporte del formulario
+// --- Nuevo endpoint para recibir el reporte del formulario (Parte 1 del reto, formulario) ---
 app.post('/submit-report', (req, res) => {
     const reportData = req.body; // Los datos del formulario estarán en req.body gracias a express.json()
     console.log('¡Reporte de Riesgo Recibido!');
     console.log('Datos del Reporte:', reportData);
 
-
-    
+    // Aquí iría la lógica para guardar en base de datos, etc.
+    // Por ahora, solo confirmamos la recepción.
 
     // Envía una respuesta al frontend
     res.status(200).json({
@@ -103,6 +112,8 @@ app.post('/submit-report', (req, res) => {
 // Iniciar el servidor
 app.listen(port, () => {
     console.log(`Servidor Express escuchando en http://localhost:${port}`);
-    console.log(`Puedes ver tu página HTML aquí: http://localhost:${port}/`);
-    console.log(`Prueba el endpoint de la API aquí: http://localhost:${port}/greet`);
+    console.log(`Puedes ver tu página HTML principal aquí: http://localhost:${port}/NodeJsReto/index.html`);
+    console.log(`Puedes ver tus evidencias aquí: http://localhost:${port}/evidencias.html`);
+    console.log(`Prueba el endpoint /greet aquí: http://localhost:${port}/greet`);
+    console.log(`Prueba el endpoint /add aquí: http://localhost:${port}/add?a=10&b=5`);
 });

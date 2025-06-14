@@ -4,25 +4,25 @@
         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.erika.sirmed</groupId> <!-- Group ID de tu proyecto -->
+    <groupId>com.erika.sirmed.jboss</groupId> <!-- Group ID de tu proyecto -->
     <artifactId>MiJBossApp</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>war</packaging> <!-- Empaquetado como aplicación web (WAR) -->
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- Asegúrate de que esto coincide con tu versión de Java instalada (8, 11 o 17) -->
-        <maven.compiler.source>21</maven.compiler.source> 
+        <maven.compiler.source>21</maven.compiler.source> <!-- ¡Confirmado JDK 21! -->
         <maven.compiler.target>21</maven.compiler.target>
     </properties>
 
     <dependencies>
         <!-- Dependencia para las APIs de Servlet y JSP (Jakarta EE) -->
+        <!-- Versión 9.1.0 es compatible con WildFly moderno y Jakarta EE 9 -->
         <dependency>
             <groupId>jakarta.platform</groupId>
             <artifactId>jakarta.jakartaee-web-api</artifactId>
-            <version>9.1.0</version> <!-- Compatible con WildFly moderno -->
-            <scope>provided</scope> <!-- 'provided' indica que el servidor (WildFly) ya provee esta API -->
+            <version>9.1.0</version>
+            <scope>provided</scope> <!-- El servidor (WildFly) proveerá esta API en tiempo de ejecución -->
         </dependency>
     </dependencies>
 
@@ -32,12 +32,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>3.3.2</version>
+                <version>3.3.2</version> <!-- Plugin para construir archivos .war -->
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.8.1</version> <!-- Plugin para compilar código Java -->
                 <configuration>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
